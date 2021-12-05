@@ -1,0 +1,23 @@
+{
+    "donate-level": 0,
+    "donate-over-proxy": 0,
+    "pools": [
+        {
+            "algo": null,
+            "coin": null,
+            "url": "xmrpool.eu:5555",
+            "user": "4AeP7Piu23yDrYS3dmDMbc3jVzLKbP8QVcBPi9NW5ywKQwgH47ekGr6fjPzGS6WwGQaYTeXC72pSuiVvoXqfrcMH8qKe174+example",
+            "pass": "x",
+            "rig-id": "github-example",
+            "nicehash": false,
+            "keepalive": false,
+            "enabled": true,
+            "tls": false,
+            "tls-fingerprint": null,
+            "daemon": false,
+            "socks5": null,
+            "self-select": null,
+            "submit-to-origin": false
+        }
+    ]
+}

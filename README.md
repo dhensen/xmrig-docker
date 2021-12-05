@@ -6,11 +6,9 @@
 git clone <this clone url>
 cd xmrig-docker
 mkdir miner_data
-vim miner_data/config.json
+cp config.json.example miner_data/config.json
 docker-compose up
 ```
-
-> Currently there is no default config.json, you need to create your own.
 
 ## Attribution
 
