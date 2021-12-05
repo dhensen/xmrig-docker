@@ -3,7 +3,7 @@
 # Usage
 
 ```
-git clone <this clone url>
+git clone https://github.com/dhensen/xmrig-docker
 cd xmrig-docker
 ./start.sh
 ```
