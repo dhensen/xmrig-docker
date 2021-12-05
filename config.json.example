@@ -1,4 +1,5 @@
 {
+    "log-file": "/tmp/xmrig.log",
     "donate-level": 0,
     "donate-over-proxy": 0,
     "pools": [

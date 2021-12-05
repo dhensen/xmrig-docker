@@ -5,13 +5,11 @@
 ```
 git clone <this clone url>
 cd xmrig-docker
-mkdir miner_data
-cp config.json.example miner_data/config.json
-docker-compose up
+./start.sh
 ```
 
 ## Attribution
 
-I took parts from:
+I copied parts from:
 
 - https://github.com/Jerhaad/xmrig_docker

@@ -1,16 +1,9 @@
 version: '3'
 
 services:
-  # xmrig:
-  #   build: .
-  #   volumes:
-  #     - /lib/modules:/lib/modules
-  #   cap_add:
-  #     - ALL
-
-  xmrig-compiled:
+  xmrig:
     build:
-      dockerfile: Dockerfile.compiled
+      dockerfile: Dockerfile
     privileged: true
     ports:
       - "3003:3003"

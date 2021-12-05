@@ -1,22 +1,44 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
-# RUN apt-get update -y && apt-get install -y --no-install-recommends kmod msr-tools
 
-ARG XMRIG_VERSION=6.16.2
-ENV XMRIG_VERSION=$XMRIG_VERSION
+# USE YOUR TIMEZONE
+# TODO: Automate
+ARG TIMEZONE=Europe/Amsterdam
 
-RUN mkdir /xmrig
-WORKDIR /xmrig
+# XMRig base version
+ARG XMRIG_VER=6.16.2
 
-# ADD https://github.com/xmrig/xmrig/releases/download/v$XMRIG_VERSION/xmrig-$XMRIG_VERSION-focal-x64.tar.gz /xmrig/xmrig.tar.gz
-ADD https://github.com/xmrig/xmrig/releases/download/v$XMRIG_VERSION/xmrig-$XMRIG_VERSION-linux-static-x64.tar.gz /xmrig/xmrig.tar.gz
-# TODO add verify signature
+# Let the installs happen on their own
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN tar xf xmrig.tar.gz
-RUN mv xmrig-$XMRIG_VERSION xmrig-client
-RUN ls -sla ./xmrig-client
+# One-off for tzdata
+RUN set -xe; \
+    apt update && apt upgrade -y; \
+    ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime; \
+    apt install -y tzdata; \
+    dpkg-reconfigure --frontend noninteractive tzdata;
 
-ENV USER=4AeP7Piu23yDrYS3dmDMbc3jVzLKbP8QVcBPi9NW5ywKQwgH47ekGr6fjPzGS6WwGQaYTeXC72pSuiVvoXqfrcMH8qKe174+docker
-ENV URL=xmrpool.eu:5555
+# Install Headers and prep
+RUN set -xe; \
+    apt-get update; \
+    apt-get install wget software-properties-common kmod msr-tools linux-headers-generic ubuntu-dev-tools -y;
 
-CMD ./xmrig-client/xmrig --user $USER --pass "x" --url $url
+# Install XMRig
+RUN set -xe; \
+    apt-get update && apt-get install build-essential cmake automake libtool autoconf -y; \
+    wget https://github.com/xmrig/xmrig/archive/refs/tags/v${XMRIG_VER}.tar.gz; \
+    tar xf v${XMRIG_VER}.tar.gz; \
+    mkdir -p xmrig-${XMRIG_VER}/build; \
+    sed -i 's/DonateLevel = 1/DonateLevel = 0/g' xmrig-${XMRIG_VER}/src/donate.h; \
+    cd xmrig-${XMRIG_VER}/scripts; \
+    ./build_deps.sh; \
+    cd ../build; \
+    cmake .. -DXMRIG_DEPS=scripts/deps -DCMAKE_BUILD_TYPE=Release; \
+    make -j $(nproc); \
+    cp xmrig /usr/local/bin/xmrig; \
+    rm -rf xmrig* *.tar.gz;
+
+WORKDIR /tmp
+COPY entrypoint.sh /
+EXPOSE 3003
+CMD "/entrypoint.sh"
