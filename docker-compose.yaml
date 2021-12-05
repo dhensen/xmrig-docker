@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  # xmrig:
+  #   build: .
+  #   volumes:
+  #     - /lib/modules:/lib/modules
+  #   cap_add:
+  #     - ALL
+
+  xmrig-compiled:
+    build:
+      dockerfile: Dockerfile.compiled
+    privileged: true
+    ports:
+      - "3003:3003"
+    volumes:
+      - "./miner_data:/tmp"
+      - "/lib/modules:/lib/modules"
+    environment:
+      - log-file=/tmp/xmrig.log
+      - XMRIG_VER=6.16.2
