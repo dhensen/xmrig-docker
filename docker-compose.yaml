@@ -3,6 +3,7 @@ version: '3'
 services:
   xmrig:
     build:
+      context: .
       dockerfile: Dockerfile
     privileged: true
     ports:
